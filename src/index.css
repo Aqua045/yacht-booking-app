@@ -1,0 +1,265 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ──────────────────────────────────────────────────── */
+@layer base {
+  body {
+    background-color: #04090f;
+    color: #f1f5f9;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    overflow-x: hidden;
+    /* Smooth text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4, .font-luxury {
+    font-family: 'Cinzel', Georgia, serif;
+    letter-spacing: 0.04em;
+  }
+
+  /* Smooth native scroll everywhere */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Prevent tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  /* Touch optimization */
+  button, a, select, input {
+    touch-action: manipulation;
+  }
+}
+
+/* ─── Scrollbar ───────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #1f2d4d; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #d4a359; }
+
+/* ─── Scroll Reveal — GPU-accelerated, mobile-safe ───────── */
+.reveal,
+.reveal-left,
+.reveal-right {
+  opacity: 0;
+  will-change: opacity, transform;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal        { transform: translateY(28px); }
+.reveal-left   { transform: translateX(-32px); }
+.reveal-right  { transform: translateX(32px); }
+
+.reveal.visible,
+.reveal-left.visible,
+.reveal-right.visible {
+  opacity: 1;
+  transform: translate(0);
+  will-change: auto; /* Release GPU layer once animated */
+}
+
+.reveal-delay-1 { transition-delay: 0.06s; }
+.reveal-delay-2 { transition-delay: 0.12s; }
+.reveal-delay-3 { transition-delay: 0.18s; }
+.reveal-delay-4 { transition-delay: 0.24s; }
+.reveal-delay-5 { transition-delay: 0.30s; }
+
+/* Disable all animations on low-end/battery-saving devices */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left, .reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Gold shimmer (desktop only) ──────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.gold-shimmer {
+  background: linear-gradient(90deg, #c8922a 0%, #f0cc76 45%, #d4a359 55%, #c8922a 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+@media (min-width: 768px) {
+  .gold-shimmer { animation: shimmer 6s infinite linear; }
+}
+
+/* ─── Card shine sweep (desktop only — perf) ──────────────── */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0); /* own compositing layer */
+}
+@media (min-width: 1024px) {
+  .card-shine::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.04) 50%,
+      transparent 65%
+    );
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.55s ease;
+    pointer-events: none;
+  }
+  .card-shine:hover::after {
+    transform: translateX(200%) skewX(-15deg);
+  }
+}
+
+/* ─── Glassmorphism (limited blur on mobile) ──────────────── */
+.luxury-glass {
+  background: rgba(9, 18, 26, 0.82);
+  border: 1px solid rgba(212, 163, 89, 0.14);
+}
+@media (min-width: 768px) {
+  .luxury-glass {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+}
+
+/* ─── Gold pulse — desktop only ────────────────────────────── */
+@keyframes goldPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 163, 89, 0); }
+  50%       { box-shadow: 0 0 14px 3px rgba(212, 163, 89, 0.15); }
+}
+@media (min-width: 768px) {
+  .gold-pulse { animation: goldPulse 4s ease-in-out infinite; }
+}
+
+/* ─── Modal fade-in ─────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px) scale(0.99); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-fade-in {
+  animation: fadeInUp 0.24s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ─── Mobile drawer slide ────────────────────────────────────── */
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mobile-drawer {
+  animation: slideDown 0.2s ease both;
+}
+
+/* ─── Toast ─────────────────────────────────────────────────── */
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideOutRight {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(100%); }
+}
+.toast-in  { animation: slideInRight 0.28s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.toast-out { animation: slideOutRight 0.24s cubic-bezier(0.7, 0, 1, 1) both; }
+
+/* ─── Hero background ───────────────────────────────────────── */
+.hero-bg {
+  will-change: transform;
+}
+/* Disable parallax on mobile — causes jank */
+@media (max-width: 767px) {
+  .hero-bg {
+    will-change: auto;
+    transform: none !important;
+  }
+}
+
+/* ─── Scrollbar hide utility ────────────────────────────────── */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* ─── Image rendering ───────────────────────────────────────── */
+img {
+  image-rendering: auto;
+  decoding: async;
+}
+
+/* ─── Focus rings ───────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #d4a359;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection {
+  background: rgba(212, 163, 89, 0.25);
+  color: #fff;
+}
+
+/* ─── Section dividers ──────────────────────────────────────── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 163, 89, 0.2), transparent);
+}
+
+/* ─── Stat number style ─────────────────────────────────────── */
+.stat-number {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ─── Booking bar field separator ───────────────────────────── */
+.bar-field {
+  position: relative;
+}
+@media (min-width: 640px) {
+  .bar-field + .bar-field::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+}
+
+/* ─── Print: boarding pass only ─────────────────────────────── */
+@media print {
+  @page { size: A4 portrait; margin: 1cm; }
+  body * { visibility: hidden !important; }
+  #printable-boarding-pass,
+  #printable-boarding-pass * { visibility: visible !important; }
+  #printable-boarding-pass {
+    position: absolute !important;
+    left: 0 !important; top: 0 !important;
+    width: 100% !important;
+    padding: 20px !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+  #printable-boarding-pass button,
+  #printable-boarding-pass a { display: none !important; }
+}
